@@ -6,7 +6,6 @@
         <title>AdminLTE 3 | Dashboard</title>
         <%@include file="/cms/includes/header.jsp" %>
     </head>
-    <body>
     <body class="hold-transition sidebar-mini layout-fixed">
         <%@include file="/cms/includes/checkLogin.jsp" %>
         

@@ -21,10 +21,15 @@
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     </head>
     <%
+        User user = User.getUser(session);
+        if (user != null) {
+            response.sendRedirect(request.getContextPath() + "/cms/index.jsp");
+            return;
+        }
         if (request.getParameter("submit") != null) {
             String userName = Tool.validStringRequest(request.getParameter("userName"));
             String password = Tool.validStringRequest(request.getParameter("password"));
-            User user = User.getUser(userName);
+            user = User.getUser(userName);
             if (user == null) {
                 session.setAttribute("error", "Tài khoản không tồn tại");
             } else {
@@ -55,7 +60,7 @@
                             <input type="text" name="userName" class="form-control" placeholder="Username">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
+                                    <span class="fas fa-user"></span>
                                 </div>
                             </div>
                         </div>
@@ -68,16 +73,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-8">
+<!--                            <div class="col-8">
                                 <div class="icheck-primary">
                                     <input type="checkbox" id="remember" name="remember">
                                     <label for="remember">
                                         Remember Me
                                     </label>
                               </div>
-                            </div>
+                            </div>-->
                             <!-- /.col -->
-                            <div class="col-4">
+                            <div class="col-12">
                                 <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block">Sign In</button>
                             </div>
                             <!-- /.col -->

@@ -21,3 +21,9 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/plugins/summernote/summernote-bs4.css">
 <!-- Google Font: Source Sans Pro -->
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+<!-- jsGrid -->
+<link rel="stylesheet" href="<%=request.getContextPath()%>/plugins/jsgrid/jsgrid.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/plugins/jsgrid/jsgrid-theme.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="<%=request.getContextPath()%>/dist/css/adminlte.min.css">
