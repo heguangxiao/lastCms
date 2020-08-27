@@ -1,3 +1,6 @@
+<%@page import="vn.web.lastCms.utils.Md5"%>
+<%@page import="vn.web.lastCms.entity.User"%>
+<%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,6 +22,20 @@
     </head>
     <%
         if (request.getParameter("submit") != null) {
+            String userName = Tool.validStringRequest(request.getParameter("userName"));
+            String password = Tool.validStringRequest(request.getParameter("password"));
+            User user = User.getUser(userName);
+            if (user == null) {
+                session.setAttribute("error", "Tài khoản không tồn tại");
+            } else {
+                if (!Md5.encryptMD5(password).equals(user.getPassword())) {
+                    session.setAttribute("error", "Mật khẩu không chính xác");
+                } else {
+                    session.setAttribute("userLogin", user);
+                    response.sendRedirect(request.getContextPath() + "/cms/");
+                    return;
+                }
+            }
         }
     %>
     <body class="hold-transition login-page">        

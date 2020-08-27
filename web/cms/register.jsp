@@ -1,3 +1,7 @@
+<%@page import="vn.web.lastCms.utils.DateProc"%>
+<%@page import="vn.web.lastCms.utils.Md5"%>
+<%@page import="vn.web.lastCms.entity.User"%>
+<%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,6 +24,32 @@
     </head>
     <%
         if (request.getParameter("submit") != null) {
+            String userName = Tool.validStringRequest(request.getParameter("userName"));
+            String password = Tool.validStringRequest(request.getParameter("password"));
+            String rePassword = Tool.validStringRequest(request.getParameter("rePassword"));
+            if (!password.equals(rePassword)) {
+                session.setAttribute("error", "Xác nhận mật khẩu không chính xác");
+            } else {
+                User user = User.getUser(userName);
+                if (user != null) {
+                    session.setAttribute("error", "Tài khoản đã tồn tại. Vui lòng chọn tài khoản khác để đăng ký.");
+                } else {
+                    user = new User();
+                    user.setUserName(userName);
+                    user.setPassword(Md5.encryptMD5(password));
+                    user.setCreatedBy(userName);
+                    user.setCreatedAt(DateProc.createTimestamp());
+                    user.setStatus(0);
+                    user.setType(0);
+                    user.setRole("");                    
+                    if (!user.save(user)) {
+                        session.setAttribute("error", "Trang web hiện đang bảo trì. Vui lòng quay lại sau. Tks.");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/cms/login.jsp");
+                        return;
+                    }
+                }
+            }
         }
     %>
     <body class="hold-transition register-page">
