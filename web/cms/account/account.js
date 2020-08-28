@@ -9,7 +9,9 @@
                     && (!filter.CreateBy || client.CreateBy.indexOf(filter.CreateBy) > -1)
                     && (!filter.Status || client.Status === filter.Status)
                     && (!filter.Type || client.Type === filter.Type)
-                    && (!filter.Role || client.Role.indexOf(filter.Role) > -1);
+                    && (!filter.Role || client.Role.indexOf(filter.Role) > -1)
+                    && (!filter.Edit || client.Edit === filter.Edit)
+                    && (!filter.Delete || client.Delete === filter.Delete);
             });
         },
 

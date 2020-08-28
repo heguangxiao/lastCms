@@ -36,7 +36,7 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Qlý tài khoản hệ thống
+                Quản lý tài khoản
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
