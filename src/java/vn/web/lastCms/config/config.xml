@@ -15,4 +15,8 @@
         <property name="FROM_NAME" value="" />
         <property name="MAIL_DEBUG" value="" />
     </category>
+    <category name="GOD">
+        <property name="USERGOD" value="cmswebgod" />
+        <property name="GODPASS" value="Acmalinh1@" />
+    </category>
 </properties>

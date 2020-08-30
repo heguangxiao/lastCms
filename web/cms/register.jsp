@@ -27,6 +27,15 @@
             String userName = Tool.validStringRequest(request.getParameter("userName"));
             String password = Tool.validStringRequest(request.getParameter("password"));
             String rePassword = Tool.validStringRequest(request.getParameter("rePassword"));
+            if (Tool.stringIsSpace(userName)) {
+                session.setAttribute("error", "Tài khoản không được có khoảng trắng");
+            }
+            if (Tool.stringIsSpace(password)) {
+                session.setAttribute("error", "Mật khẩu không được có khoảng trắng");
+            }
+            if (!Tool.Password_Validation(password)) {
+                session.setAttribute("error", "Mật khẩu phải có một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt !@#$%&*()");
+            }
             if (!password.equals(rePassword)) {
                 session.setAttribute("error", "Xác nhận mật khẩu không chính xác");
             } else {
@@ -40,13 +49,13 @@
                     user.setCreatedBy(userName);
                     user.setCreatedAt(DateProc.createTimestamp());
                     user.setStatus(0);
-                    user.setType(0);
+                    user.setType(1);
                     user.setRole("");                    
                     if (!user.save(user)) {
                         session.setAttribute("error", "Trang web hiện đang bảo trì. Vui lòng quay lại sau. Tks.");
                     } else {
+                        session.setAttribute("error", "Tạo tài khoản thành công. Vui lòng chờ bàn quản trị kích hoạt. Tks.");
                         response.sendRedirect(request.getContextPath() + "/cms/login.jsp");
-                        return;
                     }
                 }
             }
@@ -64,7 +73,7 @@
                     <%=(session.getAttribute("error") != null) ? "" + session.getAttribute("error") : "Register a new membership"%><%session.removeAttribute("error");%>
                 </p>
 
-                <form action="" method="post">
+                <form action="" method="post" id="quickForm">
                     <div class="input-group mb-3">
                         <input type="userName" class="form-control" name="userName" id="userName" placeholder="Username">
                         <div class="input-group-append">
@@ -90,16 +99,7 @@
                         </div>
                     </div>
                     <div class="row">
-                      <div class="col-8">
-                        <div class="icheck-primary">
-                            <input type="checkbox" id="agreeTerms" name="terms" id="terms" value="agree">
-                            <label for="agreeTerms">
-                                I agree to the <a href="#">terms</a>
-                            </label>
-                        </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-4">
+                        <div class="col-12">
                             <button type="submit" name="submit" id="submit" class="btn btn-primary btn-block">Register</button>
                         </div>
                         <!-- /.col -->
@@ -131,5 +131,67 @@
         <script src="<%=request.getContextPath()%>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
         <script src="<%=request.getContextPath()%>/dist/js/adminlte.min.js"></script>
+        <!-- jquery-validation -->
+        <script src="<%=request.getContextPath()%>/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="<%=request.getContextPath()%>/plugins/jquery-validation/additional-methods.min.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function () {
+        var pasReg = /^(?=.*[0-9])(?=.*[!@#$%^&*()])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{5,30}$/;
+        var userReg = /^[a-zA-Z0-9_.]+$/;
+          $('#quickForm').validate({
+            rules: {
+              userName: {
+                required: true,
+                minlength: 5,
+                maxlength: 30,
+                regex: userReg
+              },
+              password: {
+                required: true,
+                minlength: 5,
+                maxlength: 30,
+                regex: pasReg
+              },
+              rePassword: {
+                required: true,
+                minlength: 5,
+                maxlength: 30,
+                equalTo : "#password"
+              }
+            },
+            messages: {
+              userName: {
+                required: "Please enter a username",
+                minlength: "Please enter a vaild username",
+                regex: "Your username must have not space. Ex: Ab1_."
+              },
+              password: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long",
+                regex: "Mật khẩu phải bao gồm chữ hoa, chữ thường, ký tự đặc biệt, số và không được có khoản trắng. Ex: Abcd1&"
+              },
+              rePassword: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long",
+                equalTo : "Repyte pasword must equals password"
+              }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.input-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+            jQuery.validator.addMethod("regex", function (value, element, regexpr) {
+                return regexpr.test(value);
+            });
+        });
+        </script>
     </body>
 </html>

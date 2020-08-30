@@ -1117,13 +1117,10 @@ public class Tool {
     }
 
     //em Minh thêm hàm này
-    public static Timestamp convertDateToTimestamp(String date) {
+    public static Timestamp convertDateToTimestamp(String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date dateFormat = null;
-        try {
-            dateFormat = formatter.parse(date);
-        } catch (ParseException e) {
-        }
+        dateFormat = formatter.parse(date);
         long timestamp = dateFormat.getTime();
         return new Timestamp(timestamp);
     }
@@ -1150,8 +1147,7 @@ public class Tool {
     public static boolean stringIsSpace(String string) {
         char x;
         for (int i = 0; i < string.length(); i++) {
-            x = string.charAt(i);
-            
+            x = string.charAt(i);            
             if (Character.isSpaceChar(x)) {
                 return true;
             }
@@ -1160,15 +1156,17 @@ public class Tool {
     }
     
     public static boolean Password_Validation(String password) {
-        Pattern letter = Pattern.compile("[a-zA-z]");
+        Pattern letter = Pattern.compile("[a-z]");
+        Pattern letter2 = Pattern.compile("[A-Z]");
         Pattern digit = Pattern.compile("[0-9]");
         Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
 
         Matcher hasLetter = letter.matcher(password);
+        Matcher hasLetter2 = letter2.matcher(password);
         Matcher hasDigit = digit.matcher(password);
         Matcher hasSpecial = special.matcher(password);
 
-        return hasLetter.find() && hasDigit.find() && hasSpecial.find();
+        return hasLetter2.find() && hasLetter.find() && hasDigit.find() && hasSpecial.find();
     }
     
     public static boolean stringIsNumberPhone(String string) {

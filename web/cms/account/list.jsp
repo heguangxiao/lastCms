@@ -4,6 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>AdminLTE 3 | Danh sách tài khoản</title>
         <%@include file="/cms/includes/header.jsp" %>
     </head>
@@ -27,7 +28,9 @@
                     <div class="container-fluid">
                       <div class="row mb-2">
                         <div class="col-sm-6">
-                          <h1>Danh sách tài khoản</h1>
+                            <p class="login-box-msg error-content">
+                                <%=(session.getAttribute("error") != null) ? "" + session.getAttribute("error") : ""%><%session.removeAttribute("error");%>
+                            </p>
                         </div>
                         <div class="col-sm-6">
                           <ol class="breadcrumb float-sm-right">
@@ -44,7 +47,7 @@
                   <section class="content">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title"></h3>
+                        <h3 class="card-title">Danh sách tài khoản</h3>
                       </div>
                       <!-- /.card-header -->
                       <div class="card-body">
@@ -82,7 +85,7 @@
             ];
             
             db.type = [
-                { Name: "Quản trị viên", Id: 0 },
+                { Name: "Đại lý", Id: 0 },
                 { Name: "Người dùng", Id: 1 }
             ];
             
@@ -97,8 +100,8 @@
                     "Status": <%=elem.getStatus()%>,
                     "Type": <%=elem.getType()%>,
                     "Role": "<%=elem.getRole()%>",
-                    "Edit": "<a href='<%=request.getContextPath()%>/cms/account/edit.jsp'><img src='<%=request.getContextPath()%>/dist/img/edit.png' class='img-sm' alt='Edit'></a>",
-                    "Delete": "<a href='<%=request.getContextPath()%>/cms/account/del.jsp'><img src='<%=request.getContextPath()%>/dist/img/delete.png' class='img-sm' alt='Delete'></a>"
+                    "Edit": "<a href='<%=request.getContextPath()%>/cms/account/edit.jsp?param1=<%=elem.getId()%>'><img src='<%=request.getContextPath()%>/dist/img/edit.png' class='img-sm' alt='Edit'></a>",
+                    "Delete": "<a onclick='return askBeforeDelete()' href='<%=request.getContextPath()%>/cms/account/del.jsp?param1=<%=elem.getId()%>'><img src='<%=request.getContextPath()%>/dist/img/delete.png' class='img-sm' alt='Delete'></a>"
                 },
                 <%
                     }
@@ -122,8 +125,8 @@
                       { name: "Status", type: "select", items: db.status, valueField: "Id", textField: "Name" },
                       { name: "Type", type: "select", items: db.type, valueField: "Id", textField: "Name" },
                       { name: "Role", type: "text", width: 100 },
-                      { name: "Edit", type: "text", width: 100 },
-                      { name: "Delete", type: "text", width: 100 }
+                      { name: "Edit", type: "text", width: 50 },
+                      { name: "Delete", type: "text", width: 60 }
                   ]
               });
             });

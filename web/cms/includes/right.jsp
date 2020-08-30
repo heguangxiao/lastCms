@@ -55,6 +55,41 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Lịch sử và thống kê
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/history/topup.jsp" class="nav-link">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>Lịch sử ứng tiền</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/statictis/topup.jsp" class="nav-link">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>Thống kê ứng tiền</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/history/charg.jsp" class="nav-link">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>Lịch sử nạp hoàn tiền</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/statictis/charg.jsp" class="nav-link">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>Thống kê nạp hoàn tiền</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

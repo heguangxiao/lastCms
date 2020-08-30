@@ -8,6 +8,14 @@
     <listener>
         <listener-class>vn.web.lastCms.config.MyContext</listener-class>
     </listener>
+    <servlet>
+        <servlet-name>AddAccount</servlet-name>
+        <servlet-class>vn.web.lastCms.servlet.AddAccount</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddAccount</servlet-name>
+        <url-pattern>/addAccount</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             15

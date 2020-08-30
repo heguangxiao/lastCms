@@ -24,7 +24,6 @@
         User user = User.getUser(session);
         if (user != null) {
             response.sendRedirect(request.getContextPath() + "/cms/index.jsp");
-            return;
         }
         if (request.getParameter("submit") != null) {
             String userName = Tool.validStringRequest(request.getParameter("userName"));
@@ -33,12 +32,17 @@
             if (user == null) {
                 session.setAttribute("error", "Tài khoản không tồn tại");
             } else {
-                if (!Md5.encryptMD5(password).equals(user.getPassword())) {
-                    session.setAttribute("error", "Mật khẩu không chính xác");
-                } else {
-                    session.setAttribute("userLogin", user);
-                    response.sendRedirect(request.getContextPath() + "/cms/");
-                    return;
+                if (user.getStatus()== 1) {
+                    if (!Md5.encryptMD5(password).equals(user.getPassword())) {
+                        session.setAttribute("error", "Mật khẩu không chính xác");
+                    } else {
+                        session.setAttribute("userLogin", user);
+                        response.sendRedirect(request.getContextPath() + "/cms/");
+                    }
+                } else if (user.getStatus() == 0) {
+                    session.setAttribute("error", "Tài khoản của bạn chưa được kích hoạt");
+                } else if (user.getStatus() == 2) {
+                    session.setAttribute("error", "Tài khoản của bạn đã bị khóa");
                 }
             }
         }
@@ -55,9 +59,9 @@
                         <%=(session.getAttribute("error") != null) ? "" + session.getAttribute("error") : "Sign in to start your session"%><%session.removeAttribute("error");%>
                     </p>
 
-                    <form action="" method="post">
-                        <div class="input-group mb-3">
-                            <input type="text" name="userName" class="form-control" placeholder="Username">
+                    <form action="" method="post" id="quickForm">
+                        <div class="input-group mb-3 ">
+                            <input type="text" name="userName" id="userName" class="form-control" placeholder="Username">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>
@@ -65,7 +69,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" name="password" class="form-control" placeholder="Password">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>
@@ -118,6 +122,46 @@
         <script src="<%=request.getContextPath()%>/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <!-- AdminLTE App -->
         <script src="<%=request.getContextPath()%>/dist/js/adminlte.min.js"></script>
-
+        <!-- jquery-validation -->
+        <script src="<%=request.getContextPath()%>/plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="<%=request.getContextPath()%>/plugins/jquery-validation/additional-methods.min.js"></script>
+        
+        <script type="text/javascript">
+        $(document).ready(function () {
+          $('#quickForm').validate({
+            rules: {
+              userName: {
+                required: true,
+                minlength: 5
+              },
+              password: {
+                required: true,
+                minlength: 5
+              }
+            },
+            messages: {
+              userName: {
+                required: "Please enter a username",
+                minlength: "Your username must be at least 5 characters long"
+              },
+              password: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least 5 characters long"
+              }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.input-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        });
+        </script>
     </body>
 </html>
