@@ -11,14 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.apache.log4j.Logger;
 import vn.web.lastCms.db.DBPool;
 import vn.web.lastCms.utils.Tool;
 
 public class AutoService {    
     static final Logger logger = Logger.getLogger(AutoService.class);
-    public static final HashMap<Integer, AutoService> CACHE = new HashMap<>();
 
     public ArrayList<AutoService> findAll() {
         ArrayList<AutoService> all = new ArrayList();
