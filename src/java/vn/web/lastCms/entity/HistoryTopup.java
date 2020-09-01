@@ -22,6 +22,103 @@ import vn.web.lastCms.utils.Tool;
 public class HistoryTopup {
     static final Logger logger = Logger.getLogger(HistoryTopup.class);
 
+    public ArrayList<HistoryTopup> statistic(String stRequest, String endRequest, String telco) {
+        ArrayList<HistoryTopup> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT SUM(MONEY) AS MONEY, TELCO FROM history_topup WHERE 1 = 1";        
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s') ) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+        }
+        if (!Tool.checkNull(telco)) {
+            sql += " AND TELCO = ?";
+        }        
+        sql += " GROUP BY TELCO";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            if (!Tool.checkNull(telco)) {
+                pstm.setString(i++, telco);
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                HistoryTopup h = new HistoryTopup();
+                h.setMoney(rs.getInt("MONEY"));
+                h.setTelco(rs.getString("TELCO"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
+    public ArrayList<HistoryTopup> findAll(String phone, String stRequest, String endRequest, String telco) {
+        ArrayList<HistoryTopup> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM history_topup WHERE 1 = 1";        
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s') ) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+        }
+        if (!Tool.checkNull(telco)) {
+            sql += " AND TELCO = ?";
+        }
+        if (!Tool.checkNull(phone)) {
+            sql += " AND PHONE like ?";
+        }
+        sql += " GROUP BY TELCO";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            if (!Tool.checkNull(telco)) {
+                pstm.setString(i++, telco);
+            }
+            if (!Tool.checkNull(phone)) {
+                pstm.setString(i++, "%" + phone + "%");
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                HistoryTopup h = new HistoryTopup();
+                h.setId(rs.getInt("ID"));
+                h.setPhone(rs.getString("PHONE"));
+                h.setMoney(rs.getInt("MONEY"));
+                h.setTopupAt(rs.getTimestamp("TOPUPAT"));
+                h.setTelco(rs.getString("TELCO"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
     public ArrayList<HistoryTopup> findAll() {
         ArrayList<HistoryTopup> all = new ArrayList();
         Connection conn = null;

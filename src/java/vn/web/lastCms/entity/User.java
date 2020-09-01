@@ -154,6 +154,75 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }    
+    
+
+    public ArrayList<User> findAll(String username, String stRequest, String endRequest, int status, int type, String role) {
+        ArrayList<User> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM account WHERE 1 = 1";
+        if (!Tool.checkNull(username)) {
+            sql += " AND USERNAME like ?";
+        }
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s') ) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+        }
+        if (!Tool.checkNull(role)) {
+            sql += " AND ROLE like ?";
+        }
+        if (status != -1) {
+            sql += " AND STATUS = ?";
+        }
+        if (type != -1) {
+            sql += " AND TYPE = ?";
+        }
+        sql += " ORDER BY ID";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(username)) {
+                pstm.setString(i++, "%" + username + "%");
+            }
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            if (!Tool.checkNull(role)) {
+                pstm.setString(i++, "%" + role + "%");
+            }
+            if (status != -1) {
+                pstm.setInt(i++, status);
+            }
+            if (type != -1) {
+                pstm.setInt(i++, type);
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("ID"));
+                user.setUserName(rs.getString("USERNAME"));
+                user.setPassword(rs.getString("PASSWORD"));
+                user.setCreatedAt(rs.getTimestamp("CREATED_AT"));
+                user.setCreatedBy(rs.getString("CREATED_BY"));
+                user.setStatus(rs.getInt("STATUS"));
+                user.setType(rs.getInt("TYPE"));
+                user.setRole(rs.getString("ROLE"));
+                all.add(user);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
 
     public ArrayList<User> findAll() {
         ArrayList<User> all = new ArrayList();

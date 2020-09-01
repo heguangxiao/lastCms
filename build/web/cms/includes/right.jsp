@@ -71,7 +71,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/cms/statictis/topup.jsp" class="nav-link">
+                <a href="<%=request.getContextPath()%>/cms/statistic/topup.jsp" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>Thống kê ứng tiền</p>
                 </a>
@@ -83,7 +83,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<%=request.getContextPath()%>/cms/statictis/charg.jsp" class="nav-link">
+                <a href="<%=request.getContextPath()%>/cms/statistic/charg.jsp" class="nav-link">
                   <i class="nav-icon fas fa-book"></i>
                   <p>Thống kê nạp hoàn tiền</p>
                 </a>

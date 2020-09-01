@@ -18,6 +18,110 @@ import vn.web.lastCms.utils.Tool;
 public class HistoryCharg {
     static final Logger logger = Logger.getLogger(HistoryCharg.class);
 
+    public ArrayList<HistoryCharg> statistic(String stRequest, String endRequest, String telco) {
+        ArrayList<HistoryCharg> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT SUM(MONEY) AS MONEY, TELCO FROM history_charg WHERE 1 = 1";        
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(CHARGAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(CHARGAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+        }
+        if (!Tool.checkNull(telco)) {
+            sql += " AND TELCO = ?";
+        }        
+        sql += " GROUP BY TELCO";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            if (!Tool.checkNull(telco)) {
+                pstm.setString(i++, telco);
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                HistoryCharg h = new HistoryCharg();
+                h.setMoney(rs.getInt("MONEY"));
+                h.setTelco(rs.getString("TELCO"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
+    public ArrayList<HistoryCharg> findAll(String phone, String stRequest, String endRequest, String telco, int topupId) {
+        ArrayList<HistoryCharg> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM history_charg WHERE 1 = 1";        
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(CHARGAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(CHARGAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+        }
+        if (!Tool.checkNull(telco)) {
+            sql += " AND TELCO = ?";
+        }
+        if (!Tool.checkNull(phone)) {
+            sql += " AND PHONE like ?";
+        }
+        if (topupId != 0) {
+            sql += " AND TOPUP_ID = ?";
+        }
+        sql += " GROUP BY TELCO";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            if (!Tool.checkNull(telco)) {
+                pstm.setString(i++, telco);
+            }
+            if (!Tool.checkNull(phone)) {
+                pstm.setString(i++, "%" + phone + "%");
+            }
+            if (topupId != 0) {
+                pstm.setInt(i++, topupId);
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                HistoryCharg h = new HistoryCharg();
+                h.setId(rs.getInt("ID"));
+                h.setPhone(rs.getString("PHONE"));
+                h.setMoney(rs.getInt("MONEY"));
+                h.setChargAt(rs.getTimestamp("CHARGAT"));
+                h.setTelco(rs.getString("TELCO"));
+                h.setTopupId(rs.getInt("TOPUP_ID"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
     public ArrayList<HistoryCharg> findAll() {
         ArrayList<HistoryCharg> all = new ArrayList();
         Connection conn = null;
