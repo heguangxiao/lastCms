@@ -40,6 +40,60 @@ public class BlockPhone {
         }
         return all;
     }
+    
+    public ArrayList<BlockPhone> findAll(String phone) {
+        ArrayList<BlockPhone> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM block_phone WHERE 1 = 1";
+        if (!Tool.checkNull(phone)) {
+            sql += " AND PHONE like ?";
+        }
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(phone)) {
+                pstm.setString(i++, "%" + phone + "%");
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                BlockPhone h = new BlockPhone();
+                h.setId(rs.getInt("ID"));
+                h.setPhone(rs.getString("PHONE"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
+    public boolean existsByPhone(String phone) {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM block_phone WHERE PHONE = ?";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            pstm.setString(i++, phone);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                result = true;
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return result;
+    }
 
     public BlockPhone findById(int id) {
         BlockPhone h = null;

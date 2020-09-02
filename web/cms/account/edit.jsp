@@ -66,11 +66,10 @@
                     dao.setRole(strRole);                    
                     if (!dao.update(dao)) {
                         session.setAttribute("error", "Chức năng chỉnh sửa tài khoản hiện đang bảo trì. Vui lòng quay lại sau. Tks.");
-                        response.sendRedirect(request.getContextPath() + "/cms/account/list.jsp");
                     } else {
                         session.setAttribute("error", "Chỉnh sửa tài khoản thành công. ");
-                        response.sendRedirect(request.getContextPath() + "/cms/account/list.jsp");
                     }
+                    response.sendRedirect(request.getContextPath() + "/cms/account/list.jsp");
                 }
             }
         %>

@@ -45,7 +45,62 @@ public class ServiceQuota {
         }
         return all;
     }
-
+    
+    public ArrayList<ServiceQuota> findAll(String phone) {
+        ArrayList<ServiceQuota> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM service_quota WHERE 1 = 1";
+        if (!Tool.checkNull(phone)) {
+            sql += " AND PHONE like ?";
+        }
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(phone)) {
+                pstm.setString(i++, "%" + phone + "%");
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                ServiceQuota h = new ServiceQuota();
+                h.setId(rs.getInt("ID"));
+                h.setPhone(rs.getString("PHONE"));
+                h.setQuota(rs.getInt("QUOTA"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
+    public boolean existsByPhone(String phone) {
+        boolean result = false;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM service_quota WHERE PHONE = ?";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            pstm.setString(i++, phone);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                result = true;
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return result;
+    }
+    
     public ServiceQuota findById(int id) {
         ServiceQuota h = null;
         Connection conn = null;
@@ -57,6 +112,32 @@ public class ServiceQuota {
             pstm = conn.prepareStatement(sql);
             int i = 1;
             pstm.setInt(i++, id);
+            rs = pstm.executeQuery();
+            if (rs.next()) {
+                h = new ServiceQuota();
+                h.setId(rs.getInt("ID"));
+                h.setPhone(rs.getString("PHONE"));
+                h.setQuota(rs.getInt("QUOTA"));
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return h;
+    }
+    
+    public ServiceQuota findByPhone(String phone) {
+        ServiceQuota h = null;
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM service_quota WHERE PHONE = ?";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            pstm.setString(i++, phone);
             rs = pstm.executeQuery();
             if (rs.next()) {
                 h = new ServiceQuota();

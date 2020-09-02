@@ -43,13 +43,13 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/account/list.jsp" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Danh sách tài khoản</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/account/add.jsp" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Thêm mới tài khoản</p>
                 </a>
               </li>
@@ -66,26 +66,55 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/history/topup.jsp" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Lịch sử ứng tiền</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/statistic/topup.jsp" class="nav-link">
-                  <i class="nav-icon fas fa-book"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Thống kê ứng tiền</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/history/charg.jsp" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Lịch sử nạp hoàn tiền</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/statistic/charg.jsp" class="nav-link">
-                  <i class="nav-icon fas fa-book"></i>
+                  <i class="far fa-circle nav-icon"></i>
                   <p>Thống kê nạp hoàn tiền</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon far fa-plus-square"></i>
+              <p>
+                Tiện ích hệ thống
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/extensions/searchhistory.jsp" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tra cứu lịch sử thuê bao</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/extensions/blockphone.jsp" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                    <p>Khóa thuê bao</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<%=request.getContextPath()%>/cms/extensions/phonequota.jsp" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                    <p>Đặt hạn mức</p>
                 </a>
               </li>
             </ul>

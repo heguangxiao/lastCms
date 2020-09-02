@@ -12,8 +12,26 @@ public class DateProc {
     public DateProc() {
     }
 
+    public static String createMMDDYYYY() {
+        return Timestamp2MMDDYYYY(createTimestamp());
+    }
+    
     public static String createDDMMYYYY() {
         return Timestamp2DDMMYYYY(createTimestamp());
+    }
+
+    public static String createMMDDYYYY_Start01() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new java.util.Date(System.currentTimeMillis()));
+
+        String strTemp = "01";
+        if (calendar.get(Calendar.MONTH) + 1 < 10) {
+            return  "0" + (calendar.get(Calendar.MONTH) + 1) + "/" + strTemp
+                    + "/" + calendar.get(Calendar.YEAR);
+        } else {
+            return (calendar.get(Calendar.MONTH) + 1) + "/" + strTemp + "/"
+                    + calendar.get(Calendar.YEAR);
+        }
     }
 
     public static String createDDMMYYYY_Start01() {

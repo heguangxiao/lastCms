@@ -49,6 +49,41 @@ public class ServiceCdr {
         return all;
     }
 
+    public ArrayList<ServiceCdr> findAll(String phone) {
+        ArrayList<ServiceCdr> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM service_cdr WHERE 1 = 1";
+        if (!Tool.checkNull(phone)) {
+            sql += " AND PHONE like ?";
+        }
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(phone)) {
+                pstm.setString(i++, "%" + phone + "%");
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                ServiceCdr h = new ServiceCdr();
+                h.setId(rs.getInt("ID"));
+                h.setPhone(rs.getString("PHONE"));
+                h.setMoney(rs.getString("MONEY"));
+                h.setChargAt(rs.getString("CHARGAT"));
+                h.setTopupAt(rs.getString("TOPUPAT"));
+                h.setTelco(rs.getString("TELCO"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+    
     public ServiceCdr findById(int id) {
         ServiceCdr h = null;
         Connection conn = null;

@@ -27,12 +27,12 @@ public class HistoryTopup {
         Connection conn = null;
         PreparedStatement pstm = null;
         ResultSet rs = null;
-        String sql = "SELECT SUM(MONEY) AS MONEY, TELCO FROM history_topup WHERE 1 = 1";        
+        String sql = "SELECT SUM(MONEY) AS MONEY, TELCO FROM history_topup WHERE 1 = 1";  
         if (!Tool.checkNull(stRequest)) {
-            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s') ) >=0";
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) >=0";
         }
         if (!Tool.checkNull(endRequest)) {
-            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) <=0";
         }
         if (!Tool.checkNull(telco)) {
             sql += " AND TELCO = ?";
@@ -73,10 +73,10 @@ public class HistoryTopup {
         ResultSet rs = null;
         String sql = "SELECT * FROM history_topup WHERE 1 = 1";        
         if (!Tool.checkNull(stRequest)) {
-            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s') ) >=0";
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) >=0";
         }
         if (!Tool.checkNull(endRequest)) {
-            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%d/%m/%Y %H:%i:%s')) <=0";
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) <=0";
         }
         if (!Tool.checkNull(telco)) {
             sql += " AND TELCO = ?";
