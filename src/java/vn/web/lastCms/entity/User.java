@@ -180,7 +180,6 @@ public class User {
         if (type != -1) {
             sql += " AND TYPE = ?";
         }
-        sql += " ORDER BY ID";
         try {
             conn = DBPool.getConnection();
             pstm = conn.prepareStatement(sql);

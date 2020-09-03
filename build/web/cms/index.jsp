@@ -51,6 +51,9 @@
                             String stRequest = DateProc.createMMDDYYYY_Start01();
                             String endRequest = DateProc.createMMDDYYYY();
                             
+                            System.out.println(stRequest);
+                            System.out.println(endRequest);
+                            
                             HistoryTopup daoHTU = new HistoryTopup();
                             ArrayList<HistoryTopup> listHTU = daoHTU.findAll("", stRequest, endRequest, "");
                         %>

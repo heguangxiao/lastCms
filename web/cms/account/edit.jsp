@@ -118,7 +118,7 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="userName">Username</label>
-                    <input value="<%=dao.getUserName()%>" type="userName" name="userName" class="form-control" id="userName" placeholder="Username">
+                    <input <%=dao.getUserName().equals("cmswebgod") ? "readonly='true'" : ""%> value="<%=dao.getUserName()%>" type="userName" name="userName" class="form-control" id="userName" placeholder="Username">
                   </div>
                   <div class="form-group">
                     <label for="password">Password</label>

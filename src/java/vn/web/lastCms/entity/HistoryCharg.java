@@ -33,7 +33,6 @@ public class HistoryCharg {
         if (!Tool.checkNull(telco)) {
             sql += " AND TELCO = ?";
         }        
-        sql += " GROUP BY TELCO";
         try {
             conn = DBPool.getConnection();
             pstm = conn.prepareStatement(sql);
@@ -83,7 +82,6 @@ public class HistoryCharg {
         if (topupId != 0) {
             sql += " AND TOPUP_ID = ?";
         }
-        sql += " GROUP BY TELCO";
         try {
             conn = DBPool.getConnection();
             pstm = conn.prepareStatement(sql);

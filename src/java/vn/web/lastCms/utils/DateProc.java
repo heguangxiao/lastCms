@@ -25,6 +25,7 @@ public class DateProc {
         calendar.setTime(new java.util.Date(System.currentTimeMillis()));
 
         String strTemp = "01";
+        
         if (calendar.get(Calendar.MONTH) + 1 < 10) {
             return  "0" + (calendar.get(Calendar.MONTH) + 1) + "/" + strTemp
                     + "/" + calendar.get(Calendar.YEAR);

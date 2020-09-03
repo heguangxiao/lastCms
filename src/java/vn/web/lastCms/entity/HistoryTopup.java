@@ -37,7 +37,6 @@ public class HistoryTopup {
         if (!Tool.checkNull(telco)) {
             sql += " AND TELCO = ?";
         }        
-        sql += " GROUP BY TELCO";
         try {
             conn = DBPool.getConnection();
             pstm = conn.prepareStatement(sql);
@@ -84,7 +83,7 @@ public class HistoryTopup {
         if (!Tool.checkNull(phone)) {
             sql += " AND PHONE like ?";
         }
-        sql += " GROUP BY TELCO";
+        System.out.println(sql);
         try {
             conn = DBPool.getConnection();
             pstm = conn.prepareStatement(sql);

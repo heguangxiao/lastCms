@@ -81,12 +81,12 @@
                                 <label>Telco</label>
                                 <select id="telco" name="telco" class="form-control select2" style="width: 100%;">
                                     <option value="">Tất cả</option>
-                                    <option <%=telco.equals("VTE") ? "selected='selected'" : ""%> value="VTE">VIETTEL</option>
-                                    <option <%=telco.equals("GPC") ? "selected='selected'" : ""%> value="GPC">VINAPHONE</option>
-                                    <option <%=telco.equals("VMS") ? "selected='selected'" : ""%> value="VMS">MOBIFONE</option>
-                                    <option <%=telco.equals("VNM") ? "selected='selected'" : ""%> value="VNM">VIETNAMMOBILE</option>
-                                    <option <%=telco.equals("BL") ? "selected='selected'" : ""%> value="BL">GMOBILE</option>
-                                    <option <%=telco.equals("DDG") ? "selected='selected'" : ""%> value="DDG">ITELECOM</option>
+                                    <option value="VTE">VIETTEL</option>
+                                    <option value="GPC">VINAPHONE</option>
+                                    <option value="VMS">MOBIFONE</option>
+                                    <option value="VNM">VIETNAMMOBILE</option>
+                                    <option value="BL">GMOBILE</option>
+                                    <option value="DDG">ITELECOM</option>
                                 </select>
                               </div>
                                 

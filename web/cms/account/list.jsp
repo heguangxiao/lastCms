@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,6 +12,16 @@
     <%
         User dao = new User();
         ArrayList<User> list = dao.findAll();
+        
+        String username = Tool.validStringRequest(request.getParameter("username"));
+        String stRequest = Tool.validStringRequest(request.getParameter("stRequest"));
+        String endRequest = Tool.validStringRequest(request.getParameter("endRequest"));
+        int status = Tool.string2Integer("status", -1);
+        int type = Tool.string2Integer("type", -1);
+        String role = Tool.validStringRequest(request.getParameter("role"));
+        if (request.getParameter("search") != null) {
+            list = dao.findAll(username, stRequest, endRequest, status, type, role);
+        }
     %>
     <body class="hold-transition sidebar-mini layout-fixed">
         <%@include file="/cms/includes/checkLogin.jsp" %>
@@ -50,6 +61,69 @@
                         <h3 class="card-title">Danh sách tài khoản</h3>
                       </div>
                       <!-- /.card-header -->
+                                            
+                      <form id="myForm">
+                            <div class="card-body">
+                              <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" name="username" class="form-control" id="username"/>
+                              </div>
+                                
+                                <div class="form-group">
+                                  <label>Start Date:</label>
+                                    <div class="input-group date" id="stRequest" data-target-input="nearest">
+                                        <input type="text" name="stRequest" class="form-control datetimepicker-input" data-target="#stRequest"/>
+                                        <div class="input-group-append" data-target="#stRequest" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                  <label>End Date:</label>
+                                    <div class="input-group date" id="endRequest" data-target-input="nearest">
+                                        <input type="text" name="endRequest" class="form-control datetimepicker-input" data-target="#endRequest"/>
+                                        <div class="input-group-append" data-target="#endRequest" data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                              <div class="form-group">
+                                <label>Status</label>
+                                <select id="status" name="status" class="form-control select2" style="width: 100%;">
+                                    <option value="-1">Tất cả</option>
+                                    <option value="0">Chờ kích hoạt</option>
+                                    <option value="1">Kích hoạt</option>
+                                    <option value="2">Khóa</option>
+                                </select>
+                              </div>
+                                
+                              <div class="form-group">
+                                <label>Type</label>
+                                <select id="type" name="type" class="form-control select2" style="width: 100%;">
+                                    <option value="-1">Tất cả</option>
+                                    <option value="0">Đại lý</option>
+                                    <option value="1">Người dùng</option>
+                                </select>
+                              </div>   
+                                
+                              <div class="form-group">
+                                <label>Role</label>
+                                <select id="role" name="role" class="form-control select2" style="width: 100%;">
+                                    <option value="">Tất cả</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="GUEST">GUEST</option>
+                                </select>
+                              </div>                                
+                                
+                              <div class="form-group">
+                                <button style="float: left" type="submit" name="search" id="search" class="btn btn-success">Tìm kiếm</button>
+                                <input style="float: left" type="submit" class="btn btn-warning" value="Làm mới" src="<%=request.getContextPath()%>/cms/history/topup.jsp" />
+                              </div>
+                            </div>
+                        </form>
+                              
                       <div class="card-body">
                         <div id="jsGrid1"></div>
                       </div>
