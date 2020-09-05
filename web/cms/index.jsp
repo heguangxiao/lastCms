@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+<%@page import="vn.web.lastCms.entity.Chart"%>
 <%@page import="vn.web.lastCms.entity.BlockPhone"%>
 <%@page import="vn.web.lastCms.entity.ServiceQuota"%>
 <%@page import="vn.web.lastCms.entity.HistoryCharg"%>
@@ -13,6 +16,18 @@
         <title>AdminLTE 3 | Dashboard</title>
         <%@include file="/cms/includes/header.jsp" %>
     </head>
+    <%
+        String stRequest = DateProc.createMMDDYYYY_Start01();
+        String endRequest = DateProc.createMMDDYYYY();
+        Date myDate = new SimpleDateFormat("MM/dd/yyyy").parse(stRequest); 
+        int month = myDate.getMonth() + 1;
+
+        HistoryTopup daoHTU = new HistoryTopup();
+        HistoryCharg daoHC = new HistoryCharg();
+        ServiceQuota daoSQ = new ServiceQuota();
+        BlockPhone daoBP = new BlockPhone();
+        Chart daoC = new Chart();
+    %>
     <body class="hold-transition sidebar-mini layout-fixed">
         <%@include file="/cms/includes/checkLogin.jsp" %>
         
@@ -48,13 +63,6 @@
                     <!-- Small boxes (Stat box) -->
                     <div class="row">
                         <%
-                            String stRequest = DateProc.createMMDDYYYY_Start01();
-                            String endRequest = DateProc.createMMDDYYYY();
-                            
-                            System.out.println(stRequest);
-                            System.out.println(endRequest);
-                            
-                            HistoryTopup daoHTU = new HistoryTopup();
                             ArrayList<HistoryTopup> listHTU = daoHTU.findAll("", stRequest, endRequest, "");
                         %>
                       <div class="col-lg-3 col-6">
@@ -73,7 +81,6 @@
                       </div>
                       <!-- ./col -->
                       <%
-                            HistoryCharg daoHC = new HistoryCharg();
                             ArrayList<HistoryCharg> listHC = daoHC.findAll("", stRequest, endRequest, "", 0);
                       %>
                       <div class="col-lg-3 col-6">
@@ -92,7 +99,6 @@
                       </div>
                       <!-- ./col -->
                       <%
-                            ServiceQuota daoSQ = new ServiceQuota();
                             ArrayList<ServiceQuota> listSQ = daoSQ.findAll();
                       %>
                       <div class="col-lg-3 col-6">
@@ -111,7 +117,6 @@
                       </div>
                       <!-- ./col -->
                       <%
-                            BlockPhone daoBP = new BlockPhone();
                             ArrayList<BlockPhone> listBP = daoBP.findAll();
                       %>
                       <div class="col-lg-3 col-6">
@@ -130,7 +135,58 @@
                       </div>
                       <!-- ./col -->
                     </div>
-                    <!-- /.row -->                    
+                    <!-- /.row -->                      
+                    
+                    <div class="col-lg-12">
+                        <%
+                            ArrayList<Chart> chart = daoC.chartTopupAndCharg(stRequest, endRequest);
+                            int totalMoneyCharg = 0;
+                            int totalMoneyTopup = 0;
+                            for (Chart elem : chart) {
+                                totalMoneyCharg += elem.getMoneyCharg();
+                                totalMoneyTopup += elem.getMoneyTopup();
+                            }
+                        %>
+                        <div class="card">
+                            <div class="card-header border-0">
+                              <div class="d-flex justify-content-between">
+                                <h3 class="card-title">Money tháng <%=month%></h3>
+                                <!--<a href="javascript:void(0);">View Report</a>-->
+                              </div>
+                            </div>
+                            <div class="card-body">
+                              <div class="d-flex">
+                                <p class="d-flex flex-column">
+                                  <span class="text-bold text-lg">VNĐ <%=totalMoneyCharg%> / <%=totalMoneyTopup%></span>
+                                  <!--<span>Money Over Time</span>-->
+                                </p>
+                                <p class="ml-auto d-flex flex-column text-right">
+                                  <span class="text-success">
+                                    <!--<i class="fas fa-arrow-up"></i> 33.1%-->
+                                  </span>
+                                  <span class="text-muted">
+                                      <!--Since last month-->
+                                  </span>
+                                </p>
+                              </div>
+                              <!-- /.d-flex -->
+
+                              <div class="position-relative mb-4">
+                                <canvas id="sales-chart" height="200"></canvas>
+                              </div>
+
+                              <div class="d-flex flex-row justify-content-end">
+                                <span class="mr-2">
+                                  <i class="fas fa-square text-primary"></i> Charg
+                                </span>
+
+                                <span>
+                                  <i class="fas fa-square text-gray"></i> Topup
+                                </span>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
                   </div><!-- /.container-fluid -->
                 </section>
                 <!-- /.content -->
@@ -142,6 +198,103 @@
         </div>
         
         <%@include file="/cms/includes/jquery.jsp" %>
+        <!-- OPTIONAL SCRIPTS -->
+        <script src="<%=request.getContextPath()%>/plugins/chart.js/Chart.min.js"></script>
+        <script>
+            $(function () {
+                'use strict';
+
+                var ticksStyle = {
+                  fontColor: '#495057',
+                  fontStyle: 'bold'
+                };
+
+                var mode      = 'index';
+                var intersect = true;
+
+                var $salesChart = $('#sales-chart');
+                var salesChart  = new Chart($salesChart, {
+                  type   : 'bar',
+                  data   : {
+                    labels  : [
+                         <%
+                             for (Chart elem : chart) {
+                                 %>'<%=elem.getDate()%>',<%
+                             }
+                         %>
+                    ],
+                    datasets: [
+                      {
+                        backgroundColor: '#007bff',
+                        borderColor    : '#007bff',
+                        data           : [
+                            <%
+                                for (Chart elem : chart) {
+                                    %><%=elem.getMoneyCharg()%>,<%
+                                }
+                            %>
+                        ]
+                      },
+                      {
+                        backgroundColor: '#ced4da',
+                        borderColor    : '#ced4da',
+                        data           : [
+                            <%
+                                for (Chart elem : chart) {
+                                    %><%=elem.getMoneyTopup()%>,<%
+                                }
+                            %>
+                        ]
+                      }
+                    ]
+                  },
+                  options: {
+                    maintainAspectRatio: false,
+                    tooltips           : {
+                      mode     : mode,
+                      intersect: intersect
+                    },
+                    hover              : {
+                      mode     : mode,
+                      intersect: intersect
+                    },
+                    legend             : {
+                      display: false
+                    },
+                    scales             : {
+                      yAxes: [{
+                        // display: false,
+                        gridLines: {
+                          display      : true,
+                          lineWidth    : '4px',
+                          color        : 'rgba(0, 0, 0, .2)',
+                          zeroLineColor: 'transparent'
+                        },
+                        ticks    : $.extend({
+                          beginAtZero: true,
+
+                          // Include a dollar sign in the ticks
+                          callback: function (value, index, values) {
+                            if (value >= 1000) {
+                              value /= 1000;
+                              value += 'k';
+                            }
+                            return value + " đ";
+                          }
+                        }, ticksStyle)
+                      }],
+                      xAxes: [{
+                        display  : true,
+                        gridLines: {
+                          display: false
+                        },
+                        ticks    : ticksStyle
+                      }]
+                    }
+                  }
+                });
+            });
+        </script>
         
     </body>
 </html>

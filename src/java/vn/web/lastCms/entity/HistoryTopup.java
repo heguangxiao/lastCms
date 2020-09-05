@@ -22,6 +22,44 @@ import vn.web.lastCms.utils.Tool;
 public class HistoryTopup {
     static final Logger logger = Logger.getLogger(HistoryTopup.class);
 
+    public ArrayList<HistoryTopup> chart(String stRequest, String endRequest) {
+        ArrayList<HistoryTopup> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT SUM(MONEY) AS MONEY, DAYOFMONTH(TOPUPAT) AS DATE FROM history_topup WHERE 1 = 1";      
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(TOPUPAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) <=0";
+        }    
+        sql += " GROUP BY DATE";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                HistoryTopup h = new HistoryTopup();
+                h.setMoney(rs.getInt("MONEY"));
+                h.setDate(rs.getString("DATE"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+
     public ArrayList<HistoryTopup> statistic(String stRequest, String endRequest, String telco) {
         ArrayList<HistoryTopup> all = new ArrayList();
         Connection conn = null;
@@ -83,7 +121,6 @@ public class HistoryTopup {
         if (!Tool.checkNull(phone)) {
             sql += " AND PHONE like ?";
         }
-        System.out.println(sql);
         try {
             conn = DBPool.getConnection();
             pstm = conn.prepareStatement(sql);
@@ -249,6 +286,7 @@ public class HistoryTopup {
     private int money;
     private Timestamp topupAt;
     private String telco;
+    private String date;
 
     public int getId() {
         return id;
@@ -288,6 +326,14 @@ public class HistoryTopup {
 
     public void setTelco(String telco) {
         this.telco = telco;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
     
 }

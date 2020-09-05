@@ -18,6 +18,44 @@ import vn.web.lastCms.utils.Tool;
 public class HistoryCharg {
     static final Logger logger = Logger.getLogger(HistoryCharg.class);
 
+    public ArrayList<HistoryCharg> chart(String stRequest, String endRequest) {
+        ArrayList<HistoryCharg> all = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        String sql = "SELECT SUM(MONEY) AS MONEY, DAYOFMONTH(CHARGAT) AS DATE FROM history_charg WHERE 1 = 1";      
+        if (!Tool.checkNull(stRequest)) {
+            sql += " AND DATEDIFF(CHARGAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) >=0";
+        }
+        if (!Tool.checkNull(endRequest)) {
+            sql += " AND DATEDIFF(CHARGAT,STR_TO_DATE(?, '%m/%d/%Y %H:%i:%s')) <=0";
+        }    
+        sql += " GROUP BY DATE";
+        try {
+            conn = DBPool.getConnection();
+            pstm = conn.prepareStatement(sql);
+            int i = 1;
+            if (!Tool.checkNull(stRequest)) {
+                pstm.setString(i++, stRequest + " 00:00:00");
+            }
+            if (!Tool.checkNull(endRequest)) {
+                pstm.setString(i++, endRequest + " 23:59:59");
+            }
+            rs = pstm.executeQuery();
+            while (rs.next()) {
+                HistoryCharg h = new HistoryCharg();
+                h.setMoney(rs.getInt("MONEY"));
+                h.setDate(rs.getString("DATE"));
+                all.add(h);
+            }
+        } catch (SQLException ex) {
+            logger.error(Tool.getLogMessage(ex));
+        } finally {
+            DBPool.freeConn(rs, pstm, conn);
+        }
+        return all;
+    }
+
     public ArrayList<HistoryCharg> statistic(String stRequest, String endRequest, String telco) {
         ArrayList<HistoryCharg> all = new ArrayList();
         Connection conn = null;
@@ -255,6 +293,7 @@ public class HistoryCharg {
     private Timestamp chargAt;
     private String telco;
     private int topupId;
+    private String date;
 
     public int getId() {
         return id;
@@ -302,5 +341,13 @@ public class HistoryCharg {
 
     public void setTopupId(int topupId) {
         this.topupId = topupId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
