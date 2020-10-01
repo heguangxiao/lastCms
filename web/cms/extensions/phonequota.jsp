@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.entity.ServiceQuota"%>
 <%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="java.util.ArrayList"%>
@@ -209,7 +210,7 @@
                 %>
                 {
                     "Phone": "<%=elem.getPhone()%>",
-                    "Quota": "<%=elem.getQuota()%>",
+                    "Quota": "<%=Advance.intToTime(elem.getQuota())%>",
                     "Edit": "<a href='<%=request.getContextPath()%>/cms/extensions/phonequota.jsp?param1=<%=elem.getId()%>'><img src='<%=request.getContextPath()%>/dist/img/edit.png' class='img-sm' alt='Edit'></a>",
                     "Delete": "<a onclick='return askBeforeDelete()' href='<%=request.getContextPath()%>/cms/extensions/delphonequota.jsp?param1=<%=elem.getId()%>'><img src='<%=request.getContextPath()%>/dist/img/delete.png' class='img-sm' alt='Delete'></a>"
                 },

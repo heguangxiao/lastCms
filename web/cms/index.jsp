@@ -150,14 +150,14 @@
                         <div class="card">
                             <div class="card-header border-0">
                               <div class="d-flex justify-content-between">
-                                <h3 class="card-title">Money tháng <%=month%></h3>
+                                <h3 class="card-title">Tháng <%=month%></h3>
                                 <!--<a href="javascript:void(0);">View Report</a>-->
                               </div>
                             </div>
                             <div class="card-body">
                               <div class="d-flex">
                                 <p class="d-flex flex-column">
-                                  <span class="text-bold text-lg">VNĐ <%=totalMoneyCharg%> / <%=totalMoneyTopup%></span>
+                                  <span class="text-bold text-lg">Giây <%=totalMoneyCharg%> / <%=totalMoneyTopup%></span>
                                   <!--<span>Money Over Time</span>-->
                                 </p>
                                 <p class="ml-auto d-flex flex-column text-right">
@@ -279,7 +279,7 @@
                               value /= 1000;
                               value += 'k';
                             }
-                            return value + " đ";
+                            return value + " s";
                           }
                         }, ticksStyle)
                       }],

@@ -67,25 +67,25 @@
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/history/topup.jsp" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Lịch sử ứng tiền</p>
+                  <p>Lịch sử ứng thời gian gọi</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/statistic/topup.jsp" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Thống kê ứng tiền</p>
+                  <p>Thống kê ứng thời gian gọi</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/history/charg.jsp" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Lịch sử nạp hoàn tiền</p>
+                  <p>Lịch sử nạp hoàn thời gian gọi</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="<%=request.getContextPath()%>/cms/statistic/charg.jsp" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Thống kê nạp hoàn tiền</p>
+                  <p>Thống kê nạp hoàn thời gian gọi</p>
                 </a>
               </li>
             </ul>

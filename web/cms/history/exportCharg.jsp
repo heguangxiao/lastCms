@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="vn.web.lastCms.entity.HistoryCharg"%>
 <%@page import="java.util.Date"%>
@@ -40,20 +41,21 @@
         data.add(new Object[]{
             "STT",
             "PHONE",
-            "MONEY",
+            "TIME",
             "CHARGAT",
             "TELCO",
             "TOPUP_ID"
         });
         for (HistoryCharg one : all) {
             data.add(new Object[]{
-                i++,
+                i+"",
                 one.getPhone(),
-                one.getMoney(),
+                Advance.intToTime(one.getMoney()),
                 one.getChargAt(),
                 one.getTelco(),
                 one.getTopupId()
             });
+            i++;
         }
 
         data.add(new Object[]{

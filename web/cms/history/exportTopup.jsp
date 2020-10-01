@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="vn.web.lastCms.entity.HistoryTopup"%>
 <%@page import="java.util.Date"%>
@@ -39,18 +40,19 @@
         data.add(new Object[]{
             "STT",
             "PHONE",
-            "MONEY",
+            "TIME",
             "TOPUPAT",
             "TELCO"
         });
         for (HistoryTopup one : all) {
             data.add(new Object[]{
-                i++,
+                i+"",
                 one.getPhone(),
-                one.getMoney(),
-                one.getTopupAt(),
+                Advance.intToTime(one.getMoney()),
+                one.getTopupAt()+"",
                 one.getTelco()
             });
+            i++;
         }
 
         data.add(new Object[]{

@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.entity.ServiceCdr"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.sql.Timestamp"%>
@@ -44,7 +45,7 @@
             data.add(new Object[]{
                 i++,
                 one.getPhone(),
-                one.getMoney(),
+                Advance.stringToTime(one.getMoney()),
                 one.getChargAt(),
                 one.getTopupAt(),
                 one.getTelco()

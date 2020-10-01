@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="vn.web.lastCms.entity.HistoryCharg"%>
 <%@page import="java.util.ArrayList"%>
@@ -7,7 +8,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>AdminLTE 3 | Thống kê nạp hoàn tiền</title>
+        <title>AdminLTE 3 | Thống kê nạp hoàn thời gian gọi</title>
         <%@include file="/cms/includes/header.jsp" %>
     </head>
     <%
@@ -24,8 +25,8 @@
         String urlExport = request.getContextPath() + "/cms/statistic/exportCharg.jsp?";
         String dataGet = "";
         dataGet += "stRequest=" + stRequest;
-        dataGet += "endRequest=" + endRequest;
-        dataGet += "telco=" + telco;
+        dataGet += "&endRequest=" + endRequest;
+        dataGet += "&telco=" + telco;
         urlExport += dataGet;
     %>
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -52,7 +53,7 @@
                           <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/cms/index.jsp">Home</a></li>
                             <li class="breadcrumb-item">Lịch sử và thống kê</li>
-                            <li class="breadcrumb-item active">Thống kê nạp hoàn tiền</li>
+                            <li class="breadcrumb-item active">Thống kê nạp hoàn thời gian gọi</li>
                           </ol>
                         </div>
                       </div>
@@ -63,7 +64,7 @@
                   <section class="content">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Thống kê nạp hoàn tiền</h3>
+                        <h3 class="card-title">Thống kê nạp hoàn thời gian gọi</h3>
                       </div>
                       <!-- /.card-header -->
                                             
@@ -169,7 +170,7 @@
                     for (HistoryCharg elem : list) {
                 %>
                 {
-                    "Money": "<%=elem.getMoney()%>",
+                    "Time": "<%=Advance.intToTime(elem.getMoney())%>",
                     "Telco": "<%=elem.getTelco()%>"
                 },
                 <%
@@ -188,7 +189,7 @@
                   data: db.clients,
 
                   fields: [
-                      { name: "Money", type: "text", width: 100 },
+                      { name: "Time", type: "text", width: 100 },
                       { name: "Telco", type: "text", width: 100 }
                   ]
               });

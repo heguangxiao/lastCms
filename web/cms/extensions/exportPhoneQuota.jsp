@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="org.apache.poi.ss.usermodel.Cell"%>
@@ -41,7 +42,7 @@
             data.add(new Object[]{
                 i++,
                 one.getPhone(),
-                one.getQuota()
+                Advance.intToTime(one.getQuota())
             });
         }
 

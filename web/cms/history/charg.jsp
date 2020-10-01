@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="vn.web.lastCms.entity.HistoryCharg"%>
 <%@page import="java.util.ArrayList"%>
@@ -7,7 +8,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>AdminLTE 3 | Lịch sử nạp hoàn tiền</title>
+        <title>AdminLTE 3 | Lịch sử nạp hoàn thời gian gọi</title>
         <%@include file="/cms/includes/header.jsp" %>
     </head>
     <%
@@ -26,9 +27,9 @@
         String urlExport = request.getContextPath() + "/cms/history/exportCharg.jsp?";
         String dataGet = "";
         dataGet += "phone=" + phone;
-        dataGet += "stRequest=" + stRequest;
-        dataGet += "endRequest=" + endRequest;
-        dataGet += "telco=" + telco;
+        dataGet += "&stRequest=" + stRequest;
+        dataGet += "&endRequest=" + endRequest;
+        dataGet += "&telco=" + telco;
         urlExport += dataGet;
     %>
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -55,7 +56,7 @@
                           <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/cms/index.jsp">Home</a></li>
                             <li class="breadcrumb-item">Lịch sử và thống kê</li>
-                            <li class="breadcrumb-item active">Lịch sử nạp hoàn tiền</li>
+                            <li class="breadcrumb-item active">Lịch sử nạp hoàn thời gian gọi</li>
                           </ol>
                         </div>
                       </div>
@@ -66,7 +67,7 @@
                   <section class="content">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Lịch sử nạp hoàn tiền</h3>
+                        <h3 class="card-title">Lịch sử nạp hoàn thời gian gọi</h3>
                       </div>
                       <!-- /.card-header -->
                                             
@@ -177,7 +178,7 @@
                 %>
                 {
                     "Phone": "<%=elem.getPhone()%>",
-                    "Money": "<%=elem.getMoney()%>",
+                    "Time": "<%=Advance.intToTime(elem.getMoney())%>",
                     "ChargAt": "<%=elem.getChargAt()%>",
                     "Telco": "<%=elem.getTelco()%>",
                     "TopUpId": "<%=elem.getTopupId()%>"
@@ -199,7 +200,7 @@
 
                   fields: [
                       { name: "Phone", type: "text", width: 100 },
-                      { name: "Money", type: "text", width: 100 },
+                      { name: "Time", type: "text", width: 100 },
                       { name: "ChargAt", type: "date", width: 100 },
                       { name: "Telco", type: "text", width: 100 },
                       { name: "TopUpId", type: "text", width: 100 }

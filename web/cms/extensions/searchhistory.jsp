@@ -1,3 +1,4 @@
+<%@page import="vn.web.lastCms.utils.Advance"%>
 <%@page import="vn.web.lastCms.utils.Tool"%>
 <%@page import="vn.web.lastCms.entity.ServiceCdr"%>
 <%@page import="java.util.ArrayList"%>
@@ -112,7 +113,7 @@
                 %>
                 {
                     "Phone": "<%=elem.getPhone()%>",
-                    "Money": "<%=elem.getMoney()%>",
+                    "Time": "<%=Advance.stringToTime(elem.getMoney())%>",
                     "ChargAt": "<%=elem.getChargAt()%>",
                     "TopupAt": "<%=elem.getTopupAt()%>",
                     "Telco": "<%=elem.getTelco()%>"
@@ -134,7 +135,7 @@
 
                   fields: [
                       { name: "Phone", type: "text", width: 100 },
-                      { name: "Money", type: "text", width: 100 },
+                      { name: "Time", type: "text", width: 100 },
                       { name: "ChargAt", type: "date", width: 100 },
                       { name: "TopupAt", type: "date", width: 100 },
                       { name: "Telco", type: "text", width: 100 }

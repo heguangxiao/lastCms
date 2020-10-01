@@ -5,7 +5,7 @@
         loadData: function(filter) {
             return $.grep(this.clients, function(client) {
                 return (!filter.Phone || client.Phone.indexOf(filter.Phone) > -1)
-                    && (!filter.Money || client.Money.indexOf(filter.Money) > -1)
+                    && (!filter.Time || client.Money.indexOf(filter.Time) > -1)
                     && (!filter.ChargAt || client.ChargAt.indexOf(filter.ChargAt) > -1)
                     && (!filter.TopupAt || client.TopupAt.indexOf(filter.TopupAt) > -1)
                     && (!filter.Telco || client.Telco.indexOf(filter.Telco) > -1);

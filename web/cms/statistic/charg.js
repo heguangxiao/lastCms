@@ -4,7 +4,7 @@
 
         loadData: function(filter) {
             return $.grep(this.clients, function(client) {
-                return (!filter.Money || client.Money.indexOf(filter.Money) > -1)
+                return (!filter.Time || client.Money.indexOf(filter.Time) > -1)
                     && (!filter.Telco || client.Telco.indexOf(filter.Telco) > -1);
             });
         },
